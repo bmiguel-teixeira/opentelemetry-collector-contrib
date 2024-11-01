@@ -37,12 +37,20 @@ import (
 
 type prwTelemetry interface {
 	recordTranslationFailure(ctx context.Context)
+	recordOutboundRequests(ctx context.Context, statusCode int)
 	recordTranslatedTimeSeries(ctx context.Context, numTS int)
 }
 
 type prwTelemetryOtel struct {
 	telemetryBuilder *metadata.TelemetryBuilder
 	otelAttrs        []attribute.KeyValue
+}
+
+func (p *prwTelemetryOtel) recordOutboundRequests(ctx context.Context, statusCode int) {
+	attrs := []attribute.KeyValue{}
+	attrs = append(attrs, p.otelAttrs...)
+	attrs = append(attrs, attribute.String("status_code", fmt.Sprint(statusCode)))
+	p.telemetryBuilder.ExporterPrometheusremotewriteOutboundRequests.Add(ctx, 1, metric.WithAttributes(attrs...))
 }
 
 func (p *prwTelemetryOtel) recordTranslationFailure(ctx context.Context) {
@@ -306,9 +314,11 @@ func (prwe *prwExporter) execute(ctx context.Context, writeReq *prompb.WriteRequ
 
 		resp, err := prwe.client.Do(req)
 		if err != nil {
+			prwe.telemetry.recordOutboundRequests(ctx, 0)
 			return err
 		}
 		defer resp.Body.Close()
+		prwe.telemetry.recordOutboundRequests(ctx, resp.StatusCode)
 
 		// 2xx status code is considered a success
 		// 5xx errors are recoverable and the exporter should retry

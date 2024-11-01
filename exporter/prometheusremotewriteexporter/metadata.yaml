@@ -27,3 +27,10 @@ telemetry:
       sum:
         value_type: int
         monotonic: true
+    exporter_prometheusremotewrite_outbound_requests:
+      enabled: true
+      description: Number of outbound http requests performed by this exporter
+      unit: "1"
+      sum:
+        value_type: int
+        monotonic: true

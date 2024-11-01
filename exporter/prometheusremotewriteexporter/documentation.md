@@ -14,6 +14,14 @@ Number of translation operations that failed to translate metrics from Otel to P
 | ---- | ----------- | ---------- | --------- |
 | 1 | Sum | Int | true |
 
+### otelcol_exporter_prometheusremotewrite_outbound_requests
+
+Number of outbound http requests performed by this exporter
+
+| Unit | Metric Type | Value Type | Monotonic |
+| ---- | ----------- | ---------- | --------- |
+| 1 | Sum | Int | true |
+
 ### otelcol_exporter_prometheusremotewrite_translated_time_series
 
 Number of Prometheus time series that were translated from OTel metrics

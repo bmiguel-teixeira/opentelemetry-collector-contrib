@@ -30,6 +30,7 @@ func Tracer(settings component.TelemetrySettings) trace.Tracer {
 type TelemetryBuilder struct {
 	meter                                             metric.Meter
 	ExporterPrometheusremotewriteFailedTranslations   metric.Int64Counter
+	ExporterPrometheusremotewriteOutboundRequests     metric.Int64Counter
 	ExporterPrometheusremotewriteTranslatedTimeSeries metric.Int64Counter
 	meters                                            map[configtelemetry.Level]metric.Meter
 }
@@ -57,6 +58,12 @@ func NewTelemetryBuilder(settings component.TelemetrySettings, options ...Teleme
 	builder.ExporterPrometheusremotewriteFailedTranslations, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
 		"otelcol_exporter_prometheusremotewrite_failed_translations",
 		metric.WithDescription("Number of translation operations that failed to translate metrics from Otel to Prometheus"),
+		metric.WithUnit("1"),
+	)
+	errs = errors.Join(errs, err)
+	builder.ExporterPrometheusremotewriteOutboundRequests, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_exporter_prometheusremotewrite_outbound_requests",
+		metric.WithDescription("Number of outbound http requests performed by this exporter"),
 		metric.WithUnit("1"),
 	)
 	errs = errors.Join(errs, err)
