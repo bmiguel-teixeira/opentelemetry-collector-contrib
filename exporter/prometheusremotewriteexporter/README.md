@@ -177,4 +177,3 @@ This can be done by using the `tsdb.out_of_order_time_window: 10m` settings. Ple
 
 See for more info:
 - https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb
-- https://prometheus.io/docs/prometheus/latest/feature_flags/#remote-write-receiver
