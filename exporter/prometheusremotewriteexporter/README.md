@@ -67,7 +67,6 @@ The following settings can be optionally configured:
   samples to be sent to the remote write endpoint. If the batch size is larger
   than this value, it will be split into multiple batches.
 - `max_batch_request_parallelism` (default = `5`): Maximum parallelism allowed for a single request bigger than `max_batch_size_bytes`.
-  This configuration is used only when feature gate `exporter.prometheusremotewritexporter.EnableMultipleWorkers` is enabled.
 
 Example:
 
